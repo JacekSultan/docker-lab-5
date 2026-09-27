@@ -4,7 +4,7 @@ Repozytorium demonstracyjne do zajęć:
 
 **Docker i konteneryzacja - od podstaw do środowisk produkcyjnych**
 
-Celem projektu jest pokazanie, jak uruchomić trzy kontenery w jednej sieci Docker: frontend (web/Nginx), backend (api/Flask) oraz bazę danych (MariaDB) z automatycznym importem dumpa przy pierwszym starcie, a także jak konfigurować środowiska developerskie i produkcyjne przy użyciu wielu plików docker-compose.
+Celem projektu jest pokazanie, jak uruchomić trzy kontenery w jednej sieci Docker: frontend (web/Nginx), backend (api/Flask) oraz bazę danych (MariaDB) z automatycznym importem dumpa przy pierwszym starcie, a także jak konfigurować środowiska developerskie i produkcyjne przy użyciu wielu plików compose.
 
 ---
 
@@ -26,23 +26,23 @@ Celem projektu jest pokazanie, jak uruchomić trzy kontenery w jednej sieci Dock
 ├── db/
 │   └── init.sql             # dump startowy do MariaDB
 ├── .env.example
-├── docker-compose.yml
-├── docker-compose.override.yml
-├── docker-compose.override.dev.yml
+├── compose.yaml
+├── compose.override.yaml
+├── compose.override.dev.yaml
 └── README.md
 ```
 - `web/app/index.html` - prosty frontend HTML/JS, pobiera dane z API
 - `api/app.py` - backend Python/Flask
 - `db/init.sql` - dump startowy do MariaDB (tabela sections)
 - `.env.example` - przykładowy plik zmiennych środowiskowych
-- `docker-compose*.yml` - konfiguracja środowisk Compose
+- `compose*.yaml` - konfiguracja środowisk Compose
 
 ## Czego uczy ten przykład
 - pracy z Docker Compose w realnym, wielokontenerowym projekcie
 - komunikacji frontend ↔ backend ↔ baza danych
 - użycia zmiennych środowiskowych (`.env`)
 - automatycznego importu dumpa SQL przy pierwszym starcie bazy
-- korzystania z plików `docker-compose.override.yml`
+- korzystania z plików `compose.override.yaml`
 - debugowania aplikacji przez logi i testy połączeń
 
 ## Architektura aplikacji
@@ -82,7 +82,7 @@ Aby usunąć również dane bazy i wymusić ponowny import dumpa:
 ```
 
 ### 4️⃣ Uruchomienie w trybie developerskim (override)
-Projekt zawiera dodatkowy plik: `docker-compose.override.dev.yml`, który montuje lokalne pliki frontendowe do kontenera `web`:
+Projekt zawiera dodatkowy plik: `compose.override.dev.yaml`, który montuje lokalne pliki frontendowe do kontenera `web`:
 ```yaml
 services:
   web:
@@ -93,9 +93,9 @@ Dzięki temu możliwa jest praca bez przebudowy obrazu.
 ### Aby uruchomić środowisko z wykorzystaniem override dev:
 ```shell
   docker compose \
-    -f docker-compose.yml \
-    -f docker-compose.override.yml \
-    -f docker-compose.override.dev.yml \
+    -f compose.yaml \
+    -f compose.override.yaml \
+    -f compose.override.dev.yaml \
     up --build
 ```
 ### Co daje tryb developerski
@@ -107,6 +107,6 @@ Dzięki temu możliwa jest praca bez przebudowy obrazu.
 Edytujesz pliki lokalnie → zapisujesz → odświeżasz przeglądarkę → widzisz zmiany
 ## Uwagi
 - Dump SQL jest wykonywany tylko na czystej bazie danych
-- Pliki `docker-compose.override*.yml` pozwalają łatwo modyfikować konfigurację dla różnych środowisk
+- Pliki `compose.override*.yaml` pozwalają łatwo modyfikować konfigurację dla różnych środowisk
 - Projekt odzwierciedla uproszczoną architekturę realnych aplikacji produkcyjnych
 - Kod aplikacji jest celowo prosty - celem ćwiczenia jest zrozumienie Dockera i Compose, a nie złożona logika biznesowa
